@@ -1,0 +1,36 @@
+.input-wrapper {
+  /* margin-bottom: 1rem; */
+  position: relative;
+  min-height: 90px;
+  /* border: 1px solid red; */
+}
+.label-input {
+  text-transform: capitalize;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+}
+.custom-input {
+  border-width: 0;
+  border-bottom-width: 1px;
+  width: 100%;
+  padding: 0.5rem 0rem;
+  font-size: 1rem;
+}
+.custom-input:focus {
+  outline: none;
+  opacity: 1;
+  transition: all 0.2s;
+}
+/* .custom-input::placeholder {
+  color: grey;
+} */
+.custom-input::placeholder {
+  color: grey;
+}
+.icon {
+  position: absolute;
+  right: 10px;
+  cursor: pointer;
+  top: 30px;
+}
