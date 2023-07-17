@@ -1,0 +1,22 @@
+.charts-wrapper {
+  padding: 0 2rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4rem;
+  flex-direction: column;
+  /* border: 3px solid green; */
+}
+
+h4 {
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+.chart-container {
+  box-shadow: 0px 0px 30px 8px rgba(227, 227, 227, 0.75);
+  max-width: 90%;
+  padding: 1rem 3rem;
+  /* max-width: 800px; */
+  /* border: 3px solid rgb(128, 45, 0); */
+}
