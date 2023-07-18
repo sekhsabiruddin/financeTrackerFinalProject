@@ -1,25 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Modal, Form, Input, DatePicker, Select } from "antd";
 const { Option } = Select;
-function AddIncome({ isIncomeModalVisible, handleIncomeCancel, onFinish, x }) {
-  console.log("sabir", x);
+
+const EditExpenseModal = ({ visible, onCancel, singleData }) => {
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    form.setFieldsValue({
+      name: singleData?.name,
+      amount: singleData?.amount,
+
+      tag: singleData?.tag,
+    });
+  }, [form, singleData]);
+
+  const onFinish = (values) => {
+    console.log("Form values:", values);
+    // Perform the necessary logic for updating the expense transaction
+    // ...
+    onCancel(); // Close the modal after updating
+  };
+
   return (
     <Modal
       style={{ fontWeight: 600 }}
-      title="Add Income"
-      visible={isIncomeModalVisible}
-      onCancel={handleIncomeCancel}
+      title="Edit Expense"
+      visible={visible}
+      onCancel={onCancel}
       footer={null}
     >
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={(values) => {
-          onFinish(values, "income");
-          form.resetFields();
-        }}
-      >
+      <Form form={form} layout="vertical" onFinish={onFinish}>
         <Form.Item
           style={{ fontWeight: 600 }}
           name="name"
@@ -41,11 +51,11 @@ function AddIncome({ isIncomeModalVisible, handleIncomeCancel, onFinish, x }) {
           rules={[
             {
               required: true,
-              message: "Please input the name of the transaction",
+              message: "Please input the amount of the transaction",
             },
           ]}
         >
-          <Input type="text" className="custom-input" />
+          <Input type="number" min={0} step={0.01} className="custom-input" />
         </Form.Item>
 
         <Form.Item
@@ -72,18 +82,20 @@ function AddIncome({ isIncomeModalVisible, handleIncomeCancel, onFinish, x }) {
           ]}
         >
           <Select placeholder="Select category" className="select-input-2">
-            <Option value="salary">Salary</Option>
-            <Option value="freelance">Freelance</Option>
-            <Option value="investment">Investment</Option>
+            <Option value="food">Food</Option>
+            <Option value="transportation">Transportation</Option>
+            <Option value="housing">Housing</Option>
           </Select>
         </Form.Item>
+
         <Form.Item>
           <Button className="btn btn-blue" type="primary" htmlType="submit">
-            Add Income
+            Update Expense
           </Button>
         </Form.Item>
       </Form>
     </Modal>
   );
-}
-export default AddIncome;
+};
+
+export default EditExpenseModal;

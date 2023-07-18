@@ -15,6 +15,7 @@ import AddExpenseModal from "../components/Modals/addExpense";
 import AddIncomeModal from "../components/Modals/addIncome";
 import { toast } from "react-toastify";
 import { query, getDocs } from "firebase/firestore";
+import { deleteDoc, doc } from "firebase/firestore";
 
 // import TransactionsTable from "../components/TransactionsTable";
 
@@ -90,7 +91,9 @@ function Dashboard() {
       const querySnapshot = await getDocs(q);
       let transactionsArray = [];
       querySnapshot.forEach((doc) => {
-        transactionsArray.push(doc.data());
+        const transaction = doc.data();
+        transaction.id = doc.id; // Include the 'id' property
+        transactionsArray.push(transaction);
       });
 
       setTransactions(transactionsArray);
@@ -122,9 +125,34 @@ function Dashboard() {
     setExpenses(expensesTotal);
     setTotalBalance(incomeTotal - expensesTotal);
   }
+  //sort the Transaction
   let sortedTransaction = transactions.sort((a, b) => {
     return new Date(a.date) - new Date(b.date);
   });
+
+  //delete data from table
+  const deleteTransaction = async (transactionId) => {
+    console.log("transaction Id", transactionId);
+    try {
+      // Delete the transaction from Firestore
+      await deleteDoc(doc(db, `users/${user.uid}/transactions`, transactionId));
+
+      // Update the transactions state by filtering out the deleted transaction
+      const updatedTransactions = transactions.filter(
+        (transaction) => transaction.id !== transactionId
+      );
+      setTransactions(updatedTransactions);
+
+      toast.success("Transaction deleted");
+      console.log("deleted");
+    } catch (e) {
+      console.error(e);
+      toast.error("Couldn't delete transaction");
+      console.log("not deleted");
+    }
+  };
+
+  //eidt Transtion
 
   return (
     <div>
@@ -140,7 +168,7 @@ function Dashboard() {
           showIncomeModal={showIncomeModal}
         />
       )}
-      {transactions.length != 0 ? (
+      {transactions.length !== 0 ? (
         <ChartComponet sortedTransaction={sortedTransaction} />
       ) : (
         <NoTransaction />
@@ -155,7 +183,10 @@ function Dashboard() {
         handleIncomeCancel={handleIncomeCancel}
         onFinish={onFinish}
       />
-      <TransactionsTable transactions={transactions} />
+      <TransactionsTable
+        transactions={transactions}
+        onDeleteTransaction={deleteTransaction}
+      />
     </div>
   );
 }

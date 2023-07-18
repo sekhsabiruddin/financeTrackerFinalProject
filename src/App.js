@@ -1,9 +1,9 @@
 import "./App.css";
-import Header from "./components/Header";
 import Singup from "./pages/Singup";
 import Dashboard from "./pages/Dashboard";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -12,6 +12,7 @@ function App() {
         <Route path="/" element={<Singup />} />
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
+      <ToastContainer /> {/* Add the ToastContainer component here */}
     </Router>
   );
 }

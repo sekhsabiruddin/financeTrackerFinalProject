@@ -1,25 +1,35 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Modal, Form, Input, DatePicker, Select } from "antd";
 const { Option } = Select;
-function AddIncome({ isIncomeModalVisible, handleIncomeCancel, onFinish, x }) {
-  console.log("sabir", x);
+
+const EditIncomeModal = ({ visible, onCancel, singleData }) => {
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    form.setFieldsValue({
+      name: singleData.name,
+      amount: singleData.amount,
+
+      tag: singleData.tag,
+    });
+  }, [form, singleData]);
+
+  const onFinish = (values) => {
+    console.log("Form values:", values);
+    // Perform the necessary logic for updating the income transaction
+    // ...
+    onCancel(); // Close the modal after updating
+  };
+
   return (
     <Modal
       style={{ fontWeight: 600 }}
-      title="Add Income"
-      visible={isIncomeModalVisible}
-      onCancel={handleIncomeCancel}
+      title="Edit Income"
+      visible={visible}
+      onCancel={onCancel}
       footer={null}
     >
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={(values) => {
-          onFinish(values, "income");
-          form.resetFields();
-        }}
-      >
+      <Form form={form} layout="vertical" onFinish={onFinish}>
         <Form.Item
           style={{ fontWeight: 600 }}
           name="name"
@@ -79,11 +89,12 @@ function AddIncome({ isIncomeModalVisible, handleIncomeCancel, onFinish, x }) {
         </Form.Item>
         <Form.Item>
           <Button className="btn btn-blue" type="primary" htmlType="submit">
-            Add Income
+            Update Income
           </Button>
         </Form.Item>
       </Form>
     </Modal>
   );
-}
-export default AddIncome;
+};
+
+export default EditIncomeModal;
