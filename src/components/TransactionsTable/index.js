@@ -4,7 +4,9 @@ import { getDoc, doc } from "firebase/firestore";
 import { db, auth } from "../../firebase";
 import { Table, Input, Select, Space } from "antd";
 import { onAuthStateChanged } from "firebase/auth";
+// Check the correct path to firebase.js
 
+import { collection, updateDoc } from "firebase/firestore";
 import Papa from "papaparse";
 import { Radio } from "antd";
 import SearchImg from "../../assets/search.svg";
@@ -15,7 +17,11 @@ import EditIncomeModal from "../EditModal/editIncome";
 import EditExpenseModal from "../EditModal/editExpense";
 const { Option } = Select;
 
-const TransactionsTable = ({ transactions, onDeleteTransaction }) => {
+const TransactionsTable = ({
+  transactions,
+  onDeleteTransaction,
+  setTransactions,
+}) => {
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
   const [sortKey, setSortKey] = useState("");
@@ -23,6 +29,53 @@ const TransactionsTable = ({ transactions, onDeleteTransaction }) => {
   const [selectedTransaction, setSelectedTransaction] = useState(null);
   const [singleData, setSingleData] = useState([{}]);
   const [user, setUser] = useState(null);
+  const onFinish = async (values, type) => {
+    console.log("valuestable page ", values);
+    const transactionId = values.id;
+    const newTransaction = {
+      type: type,
+      date: values.date.format("YYYY-MM-DD"),
+      amount: parseFloat(values.amount),
+      tag: values.tag,
+      name: values.name,
+    };
+
+    try {
+      // Assuming `user` is the currently logged-in user object containing the `uid`
+      if (user && user.uid) {
+        // Add the path to the user's transactions document
+        const userTransactionsRef = collection(
+          db,
+          `users/${user.uid}/transactions`
+        );
+
+        // Get the specific transaction document you want to update
+        const docRef = doc(userTransactionsRef, transactionId);
+
+        // Perform the update operation with the new data
+        await updateDoc(docRef, newTransaction);
+
+        setTransactions((prevTransactions) =>
+          prevTransactions.map((transaction) =>
+            transaction.id === transactionId
+              ? { ...transaction, ...newTransaction }
+              : transaction
+          )
+        );
+
+        // Show a success message using SweetAlert
+        Swal.fire({
+          icon: "success",
+          title: "Success!",
+          text: "Transaction data updated successfully!",
+        });
+
+        console.log("Transaction data updated successfully!");
+      }
+    } catch (error) {
+      console.error("Error updating transaction data:", error);
+    }
+  };
 
   // Delete confirmation
   const deleteTransaction = (transactionId) => {
@@ -50,21 +103,19 @@ const TransactionsTable = ({ transactions, onDeleteTransaction }) => {
   };
 
   const fetchSingleData = async (transactionId) => {
-    console.log(transactionId, "updateTransaction");
-    // Fetch single transaction data from Firebase
     try {
-      const docRef = doc(db, `users/${user.uid}/transactions`, transactionId);
-      const docSnapshot = await getDoc(docRef);
-      if (docSnapshot.exists()) {
-        const transactionData = docSnapshot.data();
-        console.log("Transaction data:", transactionData);
-        setSingleData(transactionData);
-        // Perform any necessary logic with the transaction data
-
-        // Open the edit modal with the fetched data
-        // showEditModal(transactionData);
-      } else {
-        console.log("Transaction does not exist");
+      if (user && user.uid && transactionId) {
+        // Add null check for user object and uid property
+        const docRef = doc(db, `users/${user.uid}/transactions`, transactionId);
+        const docSnapshot = await getDoc(docRef);
+        if (docSnapshot.exists()) {
+          const transactionData = docSnapshot.data();
+          const transactionWithId = { ...transactionData, id: transactionId };
+          setSingleData(transactionWithId);
+          // Perform any necessary logic with the transaction data
+        } else {
+          console.log("Transaction does not exist");
+        }
       }
     } catch (error) {
       console.error("Error fetching transaction data:", error);
@@ -118,25 +169,45 @@ const TransactionsTable = ({ transactions, onDeleteTransaction }) => {
       title: "Actions",
       key: "actions",
       width: 130,
-      render: (_, transaction) => (
-        <Space>
-          <EditOutlined
-            style={{ color: "green", cursor: "pointer" }}
-            onClick={() => {
-              fetchSingleData(transaction.id);
-              editFuncalities(transaction.type);
-            }}
-          />
-          <DeleteOutlined
-            style={{ color: "red", marginLeft: "10px", cursor: "pointer" }}
-            onClick={() => deleteTransaction(transaction.id)}
-          />
-        </Space>
-      ),
+      render: (_, transaction) => {
+        return (
+          <Space>
+            <EditOutlined
+              style={{ color: "green", cursor: "pointer" }}
+              onClick={() => {
+                fetchSingleData(transaction.id);
+                editFuncalities(transaction.type);
+              }}
+            />
+
+            <DeleteOutlined
+              style={{ color: "red", marginLeft: "10px", cursor: "pointer" }}
+              onClick={() => deleteTransaction(transaction.id)}
+            />
+          </Space>
+        );
+      },
     },
   ];
 
-  // ...rest of the code
+
+// Function for importing data from CSV
+const importCSV = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = async (e) => {
+    const csvData = e.target.result;
+    const parsedData = Papa.parse(csvData, { header: true });
+    const importedTransactions = parsedData.data;
+
+    // Here, you can handle the importedTransactions and update the database or state accordingly.
+    console.log("Imported Transactions:", importedTransactions);
+  };
+
+  reader.readAsText(file);
+};
 
   // Function for exporting to CSV
   function exportCSV() {
@@ -180,18 +251,6 @@ const TransactionsTable = ({ transactions, onDeleteTransaction }) => {
     }
   });
 
-  const handleEditIncome = (values) => {
-    // Handle the update of income transaction
-    // Update the transaction in Firebase or your desired data source
-    console.log("Edit Income", values);
-  };
-
-  const handleEditExpense = (values) => {
-    // Handle the update of expense transaction
-    // Update the transaction in Firebase or your desired data source
-    console.log("Edit Expense", values);
-  };
-
   return (
     <div style={{ width: "100%" }}>
       <div
@@ -203,6 +262,7 @@ const TransactionsTable = ({ transactions, onDeleteTransaction }) => {
           width: "100%",
           marginBottom: "1rem",
           flexWrap: "wrap",
+          padding: "0 2rem",
         }}
       >
         <h2>My Transactions</h2>
@@ -236,6 +296,7 @@ const TransactionsTable = ({ transactions, onDeleteTransaction }) => {
             accept=".csv"
             required
             style={{ display: "none" }}
+            onChange={importCSV} // Add onChange event to trigger importCSV function
           />
         </div>
       </div>
@@ -275,7 +336,7 @@ const TransactionsTable = ({ transactions, onDeleteTransaction }) => {
           visible={editMode}
           onCancel={() => setEditMode(false)}
           singleData={singleData}
-          onFinish={handleEditIncome}
+          onFinish={onFinish}
         />
       )}
       {editMode && selectedTransaction === "expense" && (
@@ -283,7 +344,7 @@ const TransactionsTable = ({ transactions, onDeleteTransaction }) => {
           visible={editMode}
           onCancel={() => setEditMode(false)}
           singleData={singleData}
-          onFinish={handleEditExpense}
+          onFinish={onFinish}
         />
       )}
     </div>

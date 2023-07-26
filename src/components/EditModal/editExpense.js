@@ -2,23 +2,25 @@ import React, { useEffect } from "react";
 import { Button, Modal, Form, Input, DatePicker, Select } from "antd";
 const { Option } = Select;
 
-const EditExpenseModal = ({ visible, onCancel, singleData }) => {
+const EditExpenseModal = ({ visible, onCancel, singleData, onFinish }) => {
   const [form] = Form.useForm();
-
   useEffect(() => {
     form.setFieldsValue({
       name: singleData?.name,
       amount: singleData?.amount,
-
       tag: singleData?.tag,
     });
   }, [form, singleData]);
 
-  const onFinish = (values) => {
-    console.log("Form values:", values);
-    // Perform the necessary logic for updating the expense transaction
-    // ...
-    onCancel(); // Close the modal after updating
+  const handleFinish = async (values) => {
+    try {
+      values.id = singleData.id;
+      await onFinish(values, "expense");
+      form.resetFields();
+      onCancel();
+    } catch (error) {
+      // console.log("Failed to update income");
+    }
   };
 
   return (
@@ -29,7 +31,7 @@ const EditExpenseModal = ({ visible, onCancel, singleData }) => {
       onCancel={onCancel}
       footer={null}
     >
-      <Form form={form} layout="vertical" onFinish={onFinish}>
+      <Form form={form} layout="vertical" onFinish={handleFinish}>
         <Form.Item
           style={{ fontWeight: 600 }}
           name="name"

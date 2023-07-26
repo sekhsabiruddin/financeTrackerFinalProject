@@ -21,17 +21,27 @@ function SingupSinginComponent() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loginForm, setLoginForm] = useState("");
   const [loading, setLoading] = useState("");
+  const [isFormValid, setIsFormValid] = useState(false);
   const navigate = useNavigate();
   //sin up using email and password
+  const validateInput = () => {
+    if (
+      name.trim() === "" ||
+      !/\S+@\S+\.\S+/.test(email) ||
+      password.length < 6 ||
+      confirmPassword !== password
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  };
   function signupWithEmailandPassword() {
-    setLoading(true);
-    let valid = true;
-    if (valid) {
+    if (validateInput()) {
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           //signed in user
           const user = userCredential.user;
-          // console.log("user=>", user);
           toast.success("user created");
           setName("");
           setEmail("");
@@ -66,7 +76,7 @@ function SingupSinginComponent() {
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.log(errorMessage, errorCode);
+          // console.log(errorMessage, errorCode);
           toast.error(errorMessage);
         });
     } else {
@@ -76,10 +86,10 @@ function SingupSinginComponent() {
 
   //create Doc
   async function createDoc(user) {
-    console.log("display", user.displayName);
-    console.log("name", name);
-    console.log("eamil", user.email);
-    console.log("photoURL", user.photoURL);
+    // console.log("display", user.displayName);
+    // console.log("name", name);
+    // console.log("eamil", user.email);
+    // console.log("photoURL", user.photoURL);
     if (!user) return;
     console.log("hi");
 
@@ -87,7 +97,7 @@ function SingupSinginComponent() {
     const userData = await getDoc(userRef);
 
     if (!userData.exists()) {
-      console.log("exist");
+      // console.log("exist");
       try {
         await setDoc(doc(db, "users", user.uid), {
           name: user.displayName ? user.displayName : name, // Fixed typo: displayNane -> displayName
@@ -95,7 +105,6 @@ function SingupSinginComponent() {
           photoURL: user.photoURL ? user.photoURL : "", // Fixed typo: pohotURL -> photoURL
           createdAt: new Date(),
         });
-
         toast.success("Doc created");
       } catch (e) {
         toast.error(e.message); // Fixed typo: meassage -> message
@@ -106,7 +115,7 @@ function SingupSinginComponent() {
   }
   //signupWithGoogle with google
   function signupWithGoogle() {
-    console.log("singupWithGoogle");
+    // console.log("singupWithGoogle");
     setLoading(true);
     signInWithPopup(auth, provider)
       .then((result) => {
@@ -130,7 +139,7 @@ function SingupSinginComponent() {
   return (
     <>
       {loginForm ? (
-        <div className="singup-wrapper">
+        <div className="login-wrapper">
           <h2 className="title">
             Login on <span style={{ color: "var(--theme)" }}>Financely.</span>
           </h2>
@@ -156,10 +165,10 @@ function SingupSinginComponent() {
               onClick={loginUsingEmail}
             />
             <p style={{ textAlign: "center" }}>or</p>
-            <Button
+            {/* <Button
               text={loading ? "Loading..." : "Signup Using Google"}
               blue={true}
-            />
+            /> */}
             <p
               className="p-login"
               style={{ textAlign: "center", margin: 0 }}
@@ -176,11 +185,11 @@ function SingupSinginComponent() {
           </h2>
           <form>
             <Input
-              type="text"
+              type="name"
               label={"Full name"}
               state={name}
               setState={setName}
-              placeholder="John Doe"
+              placeholder="john Doe"
             />
 
             <Input
@@ -196,7 +205,7 @@ function SingupSinginComponent() {
               label={"Password"}
               state={password}
               setState={setPassword}
-              placeholder="Example@1234"
+              placeholder="password"
             />
 
             <Input
@@ -204,7 +213,7 @@ function SingupSinginComponent() {
               label={"Confirm Password"}
               state={confirmPassword}
               setState={setConfirmPassword}
-              placeholder="Re-enter password"
+              placeholder="confirm password"
               password={password}
             />
             <Button
@@ -212,11 +221,11 @@ function SingupSinginComponent() {
               onClick={signupWithEmailandPassword}
             />
             <p style={{ textAlign: "center" }}>or</p>
-            <Button
+            {/* <Button
               text={loading ? "Loading..." : "Signup Using Google"}
               blue={true}
               onClick={signupWithGoogle}
-            />
+            /> */}
             <p
               className="p-login"
               style={{ textAlign: "center", margin: 0 }}

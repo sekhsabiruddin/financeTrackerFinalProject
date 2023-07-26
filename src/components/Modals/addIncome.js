@@ -1,9 +1,20 @@
 import React from "react";
-import { Button, Modal, Form, Input, DatePicker, Select } from "antd";
+import { Button, Modal, Form, Input, DatePicker, Select, message } from "antd";
 const { Option } = Select;
-function AddIncome({ isIncomeModalVisible, handleIncomeCancel, onFinish, x }) {
-  console.log("sabir", x);
+function AddIncome({ isIncomeModalVisible, handleIncomeCancel, onFinish }) {
   const [form] = Form.useForm();
+
+  const handleFinish = async (values) => {
+    try {
+      await onFinish(values, "income");
+      form.resetFields();
+      handleIncomeCancel();
+      message.success("Income added successfully.");
+    } catch (error) {
+      message.error("Failed to add income.");
+    }
+  };
+
   return (
     <Modal
       style={{ fontWeight: 600 }}
@@ -12,14 +23,7 @@ function AddIncome({ isIncomeModalVisible, handleIncomeCancel, onFinish, x }) {
       onCancel={handleIncomeCancel}
       footer={null}
     >
-      <Form
-        form={form}
-        layout="vertical"
-        onFinish={(values) => {
-          onFinish(values, "income");
-          form.resetFields();
-        }}
-      >
+      <Form form={form} layout="vertical" onFinish={handleFinish}>
         <Form.Item
           style={{ fontWeight: 600 }}
           name="name"

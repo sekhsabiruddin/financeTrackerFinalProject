@@ -48,7 +48,7 @@ function Dashboard() {
   };
 
   const onFinish = (values, type) => {
-    console.log("On finish", values, type);
+    // console.log("On finish", values, type);
     const newTransaction = {
       type: type,
       date: values.date.format("YYYY-MM-DD"),
@@ -67,13 +67,21 @@ function Dashboard() {
         transaction
       );
 
+      // Retrieve the generated unique ID from the document reference
+      const uniqueId = docRef.id;
+
+      // Add the unique ID to the transaction object
+      // console.log("uniqueId", uniqueId);
+      const transactionWithId = { ...transaction, id: uniqueId };
+
       toast.success("Transaction added");
       let newArr = [...transactions]; // Create a new array
-      newArr.push(transaction);
+      newArr.push(transactionWithId);
+
       setTransactions(newArr);
       calculateBalance();
     } catch (e) {
-      console.group(e);
+      // console.log(e);
       toast.error("Couldn't add transaction");
     }
   }
@@ -85,6 +93,7 @@ function Dashboard() {
 
   // Fetch transactions function
   async function fetchTransactions() {
+    // toast.success("fetchTransactions");
     setLoading(true);
     if (user) {
       const q = query(collection(db, `users/${user.uid}/transactions`));
@@ -93,6 +102,7 @@ function Dashboard() {
       querySnapshot.forEach((doc) => {
         const transaction = doc.data();
         transaction.id = doc.id; // Include the 'id' property
+        // console.log("id avaiable every time================> ", doc.id);
         transactionsArray.push(transaction);
       });
 
@@ -106,13 +116,14 @@ function Dashboard() {
 
   // Calculate the balance whenever the transactions change
   useEffect(() => {
+    // fetchTransactions();
     calculateBalance();
   }, [transactions]);
 
   function calculateBalance() {
     let incomeTotal = 0;
     let expensesTotal = 0;
-    console.log("transactions value is", transactions);
+    // console.log("transactions value is", transactions);
     transactions.forEach((transaction) => {
       if (transaction.type === "income") {
         incomeTotal += transaction.amount;
@@ -132,7 +143,7 @@ function Dashboard() {
 
   //delete data from table
   const deleteTransaction = async (transactionId) => {
-    console.log("transaction Id", transactionId);
+    // "transaction Id", transactionId; // Commented out the invalid statement
     try {
       // Delete the transaction from Firestore
       await deleteDoc(doc(db, `users/${user.uid}/transactions`, transactionId));
@@ -144,11 +155,11 @@ function Dashboard() {
       setTransactions(updatedTransactions);
 
       toast.success("Transaction deleted");
-      console.log("deleted");
+      // console.log("deleted");
     } catch (e) {
       console.error(e);
       toast.error("Couldn't delete transaction");
-      console.log("not deleted");
+      // console.log("not deleted");
     }
   };
 
@@ -186,6 +197,8 @@ function Dashboard() {
       <TransactionsTable
         transactions={transactions}
         onDeleteTransaction={deleteTransaction}
+        calculateBalance={calculateBalance}
+        setTransactions={setTransactions}
       />
     </div>
   );

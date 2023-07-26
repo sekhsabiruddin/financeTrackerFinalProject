@@ -9,6 +9,7 @@ function Cards({
   totalBalance,
   showExpenseModal,
   showIncomeModal,
+  fetchTransactions,
 }) {
   const formatCurrency = (value) => {
     return new Intl.NumberFormat("en-IN", {

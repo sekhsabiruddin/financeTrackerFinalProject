@@ -7,6 +7,14 @@
   padding: 1rem 1.5rem;
   margin-top: 1rem;
 }
+.login-wrapper {
+  width: 70%;
+  max-width: 450px;
+  height: auto;
+  box-shadow: var(--shadow);
+  border-radius: 1rem;
+  padding: 1rem 1.5rem;
+}
 .title {
   font-weight: 500;
   font-size: 1.2rem;
@@ -32,5 +40,9 @@ small {
 @media screen and (max-width: 568px) {
   .singup-wrapper {
     width: 95%;
+  }
+  .login-wrapper {
+    width: 95%;
+    margin-bottom: 20%;
   }
 }
