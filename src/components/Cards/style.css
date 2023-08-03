@@ -25,6 +25,11 @@
 }
 p {
   font-size: 1rem;
-  /* font-weight: 600; */
   font-weight: 600;
+}
+.totalBalance {
+  background: #062054;
+  color: #ffffff;
+  text-align: center;
+  font-size: 1.5rem;
 }

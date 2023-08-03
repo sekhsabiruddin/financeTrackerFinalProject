@@ -167,7 +167,7 @@ function Dashboard() {
 
   return (
     <div>
-      <Header />
+      <Header show={true} />
       {loading ? (
         <Loader />
       ) : (

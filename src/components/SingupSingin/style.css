@@ -1,48 +1,188 @@
-.singup-wrapper {
-  width: 70%;
-  max-width: 450px;
-  height: auto;
-  box-shadow: var(--shadow);
-  border-radius: 1rem;
-  padding: 1rem 1.5rem;
-  margin-top: 1rem;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-.login-wrapper {
-  width: 70%;
-  max-width: 450px;
-  height: auto;
-  box-shadow: var(--shadow);
-  border-radius: 1rem;
-  padding: 1rem 1.5rem;
+.form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
 }
-.title {
-  font-weight: 500;
+.container {
+  margin-top: 3rem;
+  display: flex;
+  width: 40%;
+  flex-direction: column;
+  padding: 0 3rem;
+  box-shadow: rgb(50 50 93 / 25%) 0px 2px 5px -1px,
+    rgb(0 0 0 / 30%) 0px 1px 3px -1px;
+  border-radius: 10px;
+}
+
+.login_container {
+  display: flex;
+  width: 40%;
+  flex-direction: column;
+  padding: 0 3rem;
+  box-shadow: rgb(50 50 93 / 25%) 0px 2px 5px -1px,
+    rgb(0 0 0 / 30%) 0px 1px 3px -1px;
+  height: 70vh;
+  border-radius: 10px;
+}
+.box h2 {
+  text-align: center;
+  font-size: 1.7rem;
+  margin: 1rem 0;
+  font-weight: 700;
+}
+/* button {
+  width: 100%;
+  border: 1px solid;
+  padding: 0.6rem 0.5rem;
+  border-radius: 4px;
   font-size: 1.2rem;
-  text-align: center;
-  margin: 0;
+  background: #d41e12;
+  color: #fff;
   margin-bottom: 1rem;
+} */
+h6 {
+  font-size: 1.1rem;
+  font-weight: 500;
+
+  color: #757575;
 }
-.p-login {
+.fb_btn {
+  background: #1b0258;
+}
+/* .create_btn {
+  background: #2870ff;
+  margin: 0px;
+} */
+.create_btn {
+  color: #fff;
   text-align: center;
-  font-weight: 300;
-  margin: 0;
-  font-size: 1rem;
+  width: 100%;
+  margin: 1rem 0rem;
+  padding: 0.5rem !important;
+  background-color: var(--theme);
+  font-size: 1.1rem;
+  border: 1px solid var(--theme);
+  border-radius: 0.25rem;
   cursor: pointer;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  height: auto !important;
 }
+.create_btn:hover {
+  background-color: #fff;
+  color: var(--theme);
+}
+.input-box {
+  position: relative;
+  text-align: center;
+  margin-bottom: 1rem;
+  min-height: 3rem;
+}
+
+input {
+  outline: none;
+  width: 90%;
+  height: 30px;
+  padding: 1rem 2.5rem;
+  font-size: 1rem;
+}
+.input-box span {
+  position: absolute;
+  background: #cccc;
+  position: absolute;
+  height: 36px;
+  width: 30px;
+}
+
+.input-box h2 a {
+  text-decoration: none;
+}
+.box {
+  position: relative;
+}
+.input-box .icon {
+  position: absolute;
+  top: 24%;
+}
+.eye-icon {
+  cursor: pointer;
+  margin-left: -30px;
+  position: absolute;
+  top: 10px;
+  color: #999;
+}
+
+/* Style for password visibility icon */
+.eye-icon:hover {
+  color: #555;
+}
+/* .box .icon {
+  position: absolute;
+  left: 23%;
+  top: 20%;
+  color: #fff;
+} */
 small {
-  color: #ff4d4f;
-  font-weight: 600px;
-  font-size: 14px;
-  font-family: apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  display: block;
+  text-align: left;
+  color: red !important;
+  margin-left: 22px;
+  margin-top: 4px;
 }
-@media screen and (max-width: 568px) {
-  .singup-wrapper {
-    width: 95%;
+.or-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.line {
+  flex: 1;
+  height: 1px;
+  background-color: #ccc;
+  margin: 0 10px;
+}
+
+.or-text {
+  font-weight: bold;
+  color: #777;
+  font-size: 16px;
+}
+.input-box .eye-icon {
+  background-color: unset;
+}
+@keyframes shake {
+  0% {
+    margin-left: 15px;
   }
-  .login-wrapper {
-    width: 95%;
-    margin-bottom: 20%;
+
+  100% {
+    margin-left: 30px;
   }
 }
+
+@media (max-width: 768px) {
+  * {
+    box-shadow: none;
+  }
+  .container {
+    width: 100%;
+    padding: 0 1rem;
+    box-shadow: none;
+  }
+  /* .login_container {
+    width: 100%;
+    padding: 0 1rem;
+  } */
+}
+/* @media only screen and (max-width: 600px) {
+
+} */

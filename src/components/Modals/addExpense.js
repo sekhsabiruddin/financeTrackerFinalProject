@@ -45,6 +45,7 @@ function AddExpense({
           >
             <Input type="text" className="custom-input" />
           </Form.Item>
+
           <Form.Item
             name="amount"
             label="Amount"
@@ -57,6 +58,7 @@ function AddExpense({
           >
             <Input type="number" min={0} step={0.01} />
           </Form.Item>
+
           <Form.Item
             name="date"
             label="Date"

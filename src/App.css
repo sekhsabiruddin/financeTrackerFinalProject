@@ -2,9 +2,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100vw;
+  width: 98vw;
   height: 90vh;
-  overflow-x: hidden;
+  /* overflow: hidden; */
 }
 .charst-wrapper {
   max-width: 100%;

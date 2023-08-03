@@ -6,9 +6,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
 import { signOut } from "firebase/auth";
 import { toast } from "react-toastify";
-import { LogoutOutlined } from "@ant-design/icons";
 
-const Header = () => {
+const Header = ({ show }) => {
   const [user, loading] = useAuthState(auth);
   const navigate = useNavigate();
 
@@ -38,8 +37,18 @@ const Header = () => {
   return (
     <div className="navbar">
       <p className="logo">Finacely</p>
-      <p className="logo link" onClick={logoutFnc}>
-        <LogoutOutlined /> Logout
+      <p
+        className="logo link"
+        onClick={logoutFnc}
+        style={{ display: show ? "block" : "none" }}
+      >
+        <img
+          width="26"
+          height="26"
+          src="https://img.icons8.com/metro/26/import.png"
+          alt="import"
+          style={{ filter: "invert(1)", WebkitFilter: "invert(1)" }}
+        />
       </p>
     </div>
   );

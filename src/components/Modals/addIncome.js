@@ -38,7 +38,7 @@ function AddIncome({ isIncomeModalVisible, handleIncomeCancel, onFinish }) {
           <Input type="text" className="custom-input" />
         </Form.Item>
 
-        <Form.Item
+        {/* <Form.Item
           style={{ fontWeight: 600 }}
           name="amount"
           label="Amount"
@@ -50,6 +50,19 @@ function AddIncome({ isIncomeModalVisible, handleIncomeCancel, onFinish }) {
           ]}
         >
           <Input type="text" className="custom-input" />
+        </Form.Item> */}
+
+        <Form.Item
+          name="amount"
+          label="Amount"
+          rules={[
+            {
+              required: true,
+              message: "Please enter the income amount",
+            },
+          ]}
+        >
+          <Input type="number" min={0} step={0.01} />
         </Form.Item>
 
         <Form.Item

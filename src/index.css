@@ -12,30 +12,7 @@
 }
 body {
   font-family: "Montserrat", sans-serif;
-  scrollbar-width: thin; /* Set the scrollbar to be thinner than the default */
-  scrollbar-color: #2870ff transparent; /* Set the color of the scrollbar thumb */
-
-  /* For WebKit-based browsers (e.g., Chrome, Safari) */
-  ::-webkit-scrollbar {
-    width: 6px; /* Set the width of the scrollbar */
-  }
-
-  /* For WebKit-based browsers: Style the scrollbar thumb (the draggable handle) */
-  ::-webkit-scrollbar-thumb {
-    background-color: #2870ff; /* Set the color of the scrollbar thumb */
-    border-radius: 3px; /* Set the border-radius for a rounded thumb */
-    height: 30px; /* Set the height of the scrollbar thumb */
-  }
-
-  /* Optional: Style the scrollbar track on hover (you can adjust this as needed) */
-  ::-webkit-scrollbar:hover {
-    width: 8px; /* Increase the width of the scrollbar on hover */
-  }
-
-  /* Optional: Style the scrollbar thumb on hover (you can adjust this as needed) */
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: #1f60d6; /* Change the color of the scrollbar thumb on hover */
-  }
+  scrollbar-width: thin;
 }
 
 input {
@@ -70,4 +47,23 @@ input {
 }
 .select-input > div {
   border: 0px solid #fff !important;
+}
+.Toastify__toast-body > div:last-child {
+  flex: 1 1;
+  word-break: normal !important;
+}
+div:where(.swal2-container) div:where(.swal2-actions) {
+  flex-wrap: nowrap;
+}
+/* For Webkit browsers */
+
+::-webkit-scrollbar-thumb {
+  width: 30px;
+  background-color: red;
+  border-radius: 30px;
+}
+
+::-webkit-scrollbar-button {
+  width: 50px;
+  height: 50px;
 }

@@ -21,9 +21,11 @@ function Cards({
   return (
     <div className="cards-container">
       <Row className="my-grid">
-        <Card className="my-card" title="Current Balance">
+        <Card
+          className="my-card totalBalance"
+          title={<span style={{ color: "#fff" }}>Total Balance</span>}
+        >
           <p>{formatCurrency(totalBalance)}</p>
-          <Button text="Reset Balance" blue={true} />
         </Card>
         <Card className="my-card" title="Total Income">
           <p>{formatCurrency(income)}</p>
